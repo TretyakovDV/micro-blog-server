@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose')
+require('dotenv').config();
 const { graphqlHTTP } = require('express-graphql');
+const cors = require('cors')
 const { GraphQLObjectType, GraphQLSchema, GraphQLID, GraphQLString, GraphQLList } = require('graphql');
 
 const PostSchema = new mongoose.Schema({
@@ -12,8 +14,6 @@ const PostSchema = new mongoose.Schema({
 })
 
 const PostModel = mongoose.model('Post', PostSchema)
-
-
 
 const postType = new GraphQLObjectType({
   name: 'Post',
@@ -84,12 +84,13 @@ const schema = new GraphQLSchema({
 })
 
 const app = express();
+app.use(cors());
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   graphiql: true,
 }));
 
-mongoose.connect('mongodb+srv://admin:admin@cluster0.rybid.mongodb.net/Cluster0?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.DB, {useNewUrlParser: true, useUnifiedTopology: true});
 
-app.listen(4000);
+app.listen(process.env.PORT || 8080);
 console.log('Running a GraphQL API server at http://localhost:4000/graphql');
