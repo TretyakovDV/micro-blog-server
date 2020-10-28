@@ -1,10 +1,14 @@
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 require('dotenv').config();
 const { graphqlHTTP } = require('express-graphql');
-const cors = require('cors')
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { GraphQLObjectType, GraphQLSchema, GraphQLID, GraphQLString, GraphQLList } = require('graphql');
 
+
+// === mongo db ===
 const PostSchema = new mongoose.Schema({
   title: String,
   body: String,
@@ -15,6 +19,17 @@ const PostSchema = new mongoose.Schema({
 
 const PostModel = mongoose.model('Post', PostSchema)
 
+const UserSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    unique: true
+  },
+  password: String
+})
+
+const UserModel = mongoose.model('User', UserSchema)
+// === mongo db ===
+
 const postType = new GraphQLObjectType({
   name: 'Post',
   fields: {
@@ -24,6 +39,15 @@ const postType = new GraphQLObjectType({
     image: {type: GraphQLString},
     author: {type: GraphQLString},
     date: {type: GraphQLString},
+  }
+})
+
+const userType = new GraphQLObjectType({
+  name: 'User',
+  fields: {
+    id: {type: GraphQLID},
+    email: {type: GraphQLString},
+    password: {type: GraphQLString},
   }
 })
 
@@ -73,6 +97,35 @@ const MutationType = new GraphQLObjectType({
       resolve: async (_, {id}) => {
         await PostModel.findOneAndDelete({_id: id})
         return 'Success'
+      }
+    },
+    register: {
+      type: userType,
+      args: {
+        email: {type: GraphQLString},
+        password: {type: GraphQLString}
+      },
+      resolve: async (_, {email, password}) => {
+          const hashPassword = await bcrypt.hash(password, 10);
+          return await UserModel.create({email, password: hashPassword})
+      }
+    },
+    login: {
+      type: GraphQLString,
+      args: {
+        email: {type: GraphQLString},
+        password: {type: GraphQLString}
+      },
+      resolve: async (_, {email, password}) => {
+        const user = await UserModel.findOne({email})
+        if (!user) return 'Error'
+
+        const register = await bcrypt.compare(password, user.password);
+
+        if (!register) return 'Error'
+
+        const token = jwt.sign({id: user.id, email: user.email}, 'secret');
+        return token
       }
     }
   })
