@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="55900306-8fb3-4c3e-b9fe-57508d3593eb" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1jVRn1DYmqADVSg6KxUYx3H40m2" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="55900306-8fb3-4c3e-b9fe-57508d3593eb" name="Default Changelist" comment="" />
+      <created>1603887435194</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1603887435194</updated>
+      <workItem from="1603887436227" duration="362000" />
+      <workItem from="1603887811391" duration="5245000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="-760" y="572" key="FileChooserDialogImpl" timestamp="1603892917952">
+      <screen x="-1080" y="-368" width="1080" height="1880" />
+    </state>
+    <state x="-760" y="572" key="FileChooserDialogImpl/-1080.-368.1080.1880/0.0.1920.1040@-1080.-368.1080.1880" timestamp="1603892917952" />
+    <state x="-1039" y="462" key="SettingsEditor" timestamp="1603887800239">
+      <screen x="-1080" y="-368" width="1080" height="1880" />
+    </state>
+    <state x="-1039" y="462" key="SettingsEditor/-1080.-368.1080.1880/0.0.1920.1040@-1080.-368.1080.1880" timestamp="1603887800239" />
+  </component>
+</project>
