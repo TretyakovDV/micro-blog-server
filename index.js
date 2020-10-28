@@ -84,7 +84,13 @@ const MutationType = new GraphQLObjectType({
         author: {type: GraphQLString},
         data: {type: GraphQLString},
       },
-      resolve: async (_, { title, body, image, author, date}) => {
+      resolve: async (_, { title, body, image, author, date}, ctx) => {
+        if(!ctx.headers.cookie) throw new Error('error');
+
+        const [,token] = ctx.headers.cookie.split('=')
+
+        jwt.verify(token, 'secret');
+
         const post = await PostModel.create({title, body, image, author, date})
         return post
       }
@@ -94,7 +100,12 @@ const MutationType = new GraphQLObjectType({
       args: {
         id: {type: GraphQLID}
       },
-      resolve: async (_, {id}) => {
+      resolve: async (_, {id}, ctx) => {
+        if(!ctx.headers.cookie) throw new Error('error');
+
+        const [,token] = ctx.headers.cookie.split('=')
+
+        jwt.verify(token, 'secret');
         await PostModel.findOneAndDelete({_id: id})
         return 'Success'
       }
@@ -116,7 +127,7 @@ const MutationType = new GraphQLObjectType({
         email: {type: GraphQLString},
         password: {type: GraphQLString}
       },
-      resolve: async (_, {email, password}) => {
+      resolve: async (_, {email, password}, ctx) => {
         const user = await UserModel.findOne({email})
         if (!user) return 'Error'
 
@@ -124,8 +135,12 @@ const MutationType = new GraphQLObjectType({
 
         if (!register) return 'Error'
 
+
+
         const token = jwt.sign({id: user.id, email: user.email}, 'secret');
-        return token
+        ctx.res.cookie('token', token)
+
+        return 'success'
       }
     }
   })
