@@ -138,7 +138,7 @@ const MutationType = new GraphQLObjectType({
 
 
         const token = jwt.sign({id: user.id, email: user.email}, process.env.SECRET);
-        ctx.res.cookie('token', token, { maxAge: 15 * 60 * 1000, httpOnly: true });
+        ctx.res.cookie('token', token);
 
         return 'success'
       }
