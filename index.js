@@ -5,6 +5,7 @@ const { graphqlHTTP } = require('express-graphql');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser')
 const { GraphQLObjectType, GraphQLSchema, GraphQLID, GraphQLString, GraphQLList } = require('graphql');
 
 
@@ -65,10 +66,11 @@ const QueryType = new GraphQLObjectType({
     },
     posts: {
       type: new GraphQLList(postType),
-      resolve: () => {
+      resolve: (_,$,ctx) => {
         return PostModel.find({})
       }
-    }
+    },
+
   })
 })
 
@@ -89,8 +91,7 @@ const MutationType = new GraphQLObjectType({
 
         const [,token] = ctx.headers.cookie.split('=')
 
-        jwt.verify(token, 'secret');
-
+        jwt.verify(token, process.env.SECRET);
         const post = await PostModel.create({title, body, image, author, date})
         return post
       }
@@ -135,12 +136,24 @@ const MutationType = new GraphQLObjectType({
 
         if (!register) return 'Error'
 
-
-
         const token = jwt.sign({id: user.id, email: user.email}, process.env.SECRET);
-        ctx.res.cookie('token', token);
+        ctx.res.cookie('token', token, {
+          httpOnly: true,
+          secure: false,
+          maxAge: 1000 * 60 * 15
+        });
 
         return 'success'
+      }
+    },
+    logout: {
+      type: GraphQLString,
+      args: {
+        type: {type: GraphQLString}
+      },
+      resolve: (_,$,ctx) => {
+        ctx.res.cookie('token', 'removed', {maxAge: -9999999})
+        return "success"
       }
     }
   })
@@ -152,7 +165,15 @@ const schema = new GraphQLSchema({
 })
 
 const app = express();
-app.use(cors());
+app.use(express.json())
+app.use(cors({
+  origin: [
+    `${process.env.FRONT_URL}`,
+    'http://localhost:3000'
+  ],
+  credentials: true,
+}));
+app.use(cookieParser())
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   graphiql: true,
