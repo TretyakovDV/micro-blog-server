@@ -105,7 +105,7 @@ const MutationType = new GraphQLObjectType({
 
         const [,token] = ctx.headers.cookie.split('=')
 
-        jwt.verify(token, 'secret');
+        jwt.verify(token, process.env.SECRET);
         await PostModel.findOneAndDelete({_id: id})
         return 'Success'
       }
@@ -137,8 +137,8 @@ const MutationType = new GraphQLObjectType({
 
 
 
-        const token = jwt.sign({id: user.id, email: user.email}, 'secret');
-        ctx.res.cookie('token', token)
+        const token = jwt.sign({id: user.id, email: user.email}, process.env.SECRET);
+        ctx.res.cookie('token', token, { maxAge: 15 * 60 * 1000, httpOnly: true });
 
         return 'success'
       }
