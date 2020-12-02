@@ -138,7 +138,7 @@ const MutationType = new GraphQLObjectType({
 
         const token = jwt.sign({id: user.id, email: user.email}, process.env.SECRET);
         ctx.res.cookie('token', token, {
-          httpOnly: true,
+          // httpOnly: true,
           secure: false,
           maxAge: 1000 * 60 * 15
         });
@@ -165,11 +165,12 @@ const schema = new GraphQLSchema({
 })
 
 const app = express();
-app.use(express.json())
+app.use(express.json({limit: '5mb'}))
 app.use(cors({
   origin: [
     `${process.env.FRONT_URL}`,
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://micro-blog-client-53vcc2n8e.vercel.app'
   ],
   credentials: true,
 }));
